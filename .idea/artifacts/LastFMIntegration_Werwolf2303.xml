@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="LastFMIntegration-Werwolf2303">
+    <output-path>$PROJECT_DIR$/../SpotifyXP/data/Extensions</output-path>
+    <root id="archive" name="LastFMIntegration-Werwolf2303.jar">
+      <element id="module-output" name="SpotifyXP-Last.FM" />
+    </root>
+  </artifact>
+</component>
