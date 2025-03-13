@@ -26,6 +26,7 @@
 
 package com.spotifyxp.deps.de.umass.lastfm;
 
+import com.spotifyxp.deps.de.umass.lastfm.exceptions.BadCredentialsException;
 import com.spotifyxp.deps.de.umass.xml.DomElement;
 
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class Authenticator {
 	 * @return a Session instance
 	 * @see Session
 	 */
-	public static Session getMobileSession(String username, String password, String apiKey, String secret) {
+	public static Session getMobileSession(String username, String password, String apiKey, String secret) throws BadCredentialsException {
 		if (!isMD5(password))
 			password = md5(password);
 		String authToken = md5(username + password);
@@ -66,6 +67,7 @@ public class Authenticator {
 		String sig = createSignature("auth.getMobileSession", params, secret);
 		Result result = Caller.getInstance()
 				.call("auth.getMobileSession", apiKey, "username", username, "authToken", authToken, "api_sig", sig);
+		if(result.getErrorCode() == 4) throw new BadCredentialsException();
 		DomElement element = result.getContentElement();
 		return Session.sessionFromElement(element, apiKey, secret);
 	}

@@ -1,12 +1,28 @@
 package com.spotifyxp.lastfm;
 
 import com.spotifyxp.PublicValues;
-import com.spotifyxp.configuration.ConfigValues;
+import com.spotifyxp.deps.de.umass.lastfm.Authenticator;
+import com.spotifyxp.deps.de.umass.lastfm.Session;
+import com.spotifyxp.deps.de.umass.lastfm.exceptions.BadCredentialsException;
+import com.spotifyxp.lastfm.config.ConfigValues;
 
 public class LastFM {
+    private Session session;
+
     public LastFM() {
-        LFMValues.username = PublicValues.config.getString(ConfigValues.lastfmusername.name);
-        if(PublicValues.config.getInt(ConfigValues.lastfmartistlimit.name) != 0) LFMValues.artistlimit = PublicValues.config.getInt(ConfigValues.lastfmartistlimit.name);
-        if(PublicValues.config.getInt(ConfigValues.lastfmtracklimit.name) != 0) LFMValues.tracklimit = PublicValues.config.getInt(ConfigValues.lastfmtracklimit.name);
+        if(LFMValues.config.getInt(ConfigValues.lastfmartistlimit.name) != 0) LFMValues.artistlimit = LFMValues.config.getInt(ConfigValues.lastfmartistlimit.name);
+        if(LFMValues.config.getInt(ConfigValues.lastfmtracklimit.name) != 0) LFMValues.tracklimit = LFMValues.config.getInt(ConfigValues.lastfmtracklimit.name);
+    }
+
+    public Session getSession() throws BadCredentialsException {
+        if(session == null) {
+            session = Authenticator.getMobileSession(
+                    LFMValues.config.getString(ConfigValues.lastfmusername.name()),
+                    LFMValues.config.getString(ConfigValues.lastfmpassword.name()),
+                    LFMValues.apikey,
+                    LFMValues.apisecret
+            );
+        }
+        return session;
     }
 }

@@ -1,13 +1,12 @@
 package com.spotifyxp.lastfm;
 
-import com.spotifyxp.PublicValues;
-import com.spotifyxp.configuration.ConfigValues;
 import com.spotifyxp.deps.de.umass.lastfm.Authenticator;
 import com.spotifyxp.deps.de.umass.lastfm.ImageSize;
 import com.spotifyxp.deps.de.umass.lastfm.User;
+import com.spotifyxp.deps.de.umass.lastfm.exceptions.BadCredentialsException;
+import com.spotifyxp.lastfm.config.ConfigValues;
 import com.spotifyxp.swingextension.JFrame;
 import com.spotifyxp.swingextension.JImagePanel;
-import com.spotifyxp.threading.DefThread;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,64 +47,64 @@ public class LastFMUserDialog extends JFrame {
         userimage.setBounds(80, 6, 180, 180);
         add(userimage);
 
-        setTitle("Last.fm - " + LFMValues.username);
+        setTitle("Last.fm - " + LFMValues.config.getString(ConfigValues.lastfmusername.name));
 
-        userusername = new JLabel(PublicValues.language.translate("ui.lastfm.user.username"));
+        userusername = new JLabel(LFMValues.language.translate("ui.lastfm.user.username"));
         userusername.setBounds(6, 204, 130, 16);
         add(userusername);
         userusername.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        userrealname = new JLabel(PublicValues.language.translate("ui.lastfm.user.realname"));
+        userrealname = new JLabel(LFMValues.language.translate("ui.lastfm.user.realname"));
         userrealname.setBounds(6, 232, 130, 16);
         add(userrealname);
         userrealname.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        usercountry = new JLabel(PublicValues.language.translate("ui.lastfm.user.country"));
+        usercountry = new JLabel(LFMValues.language.translate("ui.lastfm.user.country"));
         usercountry.setBounds(6, 260, 130, 16);
         add(usercountry);
         usercountry.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        userage = new JLabel(PublicValues.language.translate("ui.lastfm.user.age"));
+        userage = new JLabel(LFMValues.language.translate("ui.lastfm.user.age"));
         userage.setBounds(6, 288, 130, 16);
         add(userage);
         userage.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        usergender = new JLabel(PublicValues.language.translate("ui.lastfm.user.gender"));
+        usergender = new JLabel(LFMValues.language.translate("ui.lastfm.user.gender"));
         usergender.setBounds(6, 316, 130, 16);
         add(usergender);
         usergender.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        usersubscriber = new JLabel(PublicValues.language.translate("ui.lastfm.user.subscriber"));
+        usersubscriber = new JLabel(LFMValues.language.translate("ui.lastfm.user.subscriber"));
         usersubscriber.setBounds(6, 344, 130, 16);
         add(usersubscriber);
         usersubscriber.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        userplaycount = new JLabel(PublicValues.language.translate("ui.lastfm.user.playcount"));
+        userplaycount = new JLabel(LFMValues.language.translate("ui.lastfm.user.playcount"));
         userplaycount.setBounds(6, 372, 130, 16);
         add(userplaycount);
         userplaycount.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        userplaylists = new JLabel(PublicValues.language.translate("ui.lastfm.user.playlists"));
+        userplaylists = new JLabel(LFMValues.language.translate("ui.lastfm.user.playlists"));
         userplaylists.setBounds(6, 400, 130, 16);
         add(userplaylists);
         userplaylists.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        userregistered = new JLabel(PublicValues.language.translate("ui.lastfm.user.registered"));
+        userregistered = new JLabel(LFMValues.language.translate("ui.lastfm.user.registered"));
         userregistered.setBounds(6, 428, 130, 16);
         add(userregistered);
         userregistered.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        userartists = new JLabel(PublicValues.language.translate("ui.lastfm.user.artists"));
+        userartists = new JLabel(LFMValues.language.translate("ui.lastfm.user.artists"));
         userartists.setBounds(6, 456, 130, 16);
         add(userartists);
         userartists.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        useralbums = new JLabel(PublicValues.language.translate("ui.lastfm.user.albums"));
+        useralbums = new JLabel(LFMValues.language.translate("ui.lastfm.user.albums"));
         useralbums.setBounds(6, 484, 130, 16);
         add(useralbums);
         useralbums.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        usertracks = new JLabel(PublicValues.language.translate("ui.lastfm.user.tracks"));
+        usertracks = new JLabel(LFMValues.language.translate("ui.lastfm.user.tracks"));
         usertracks.setBounds(6, 512, 130, 16);
         add(usertracks);
         usertracks.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -158,17 +157,21 @@ public class LastFMUserDialog extends JFrame {
         usertracksvalue.setBounds(168, 512, 176, 16);
         add(usertracksvalue);
 
-        DefThread thread = new DefThread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                loadValues();
+                try {
+                    loadValues();
+                } catch (BadCredentialsException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         thread.start();
     }
     
-    void loadValues() {
-        User user = User.getInfo(Authenticator.getMobileSession(LFMValues.username, PublicValues.config.getString(ConfigValues.lastfmpassword.name), LFMValues.apikey, LFMValues.apisecret));
+    void loadValues() throws BadCredentialsException {
+        User user = User.getInfo(Authenticator.getMobileSession(LFMValues.config.getString(ConfigValues.lastfmusername.name), LFMValues.config.getString(ConfigValues.lastfmpassword.name), LFMValues.apikey, LFMValues.apisecret));
         try {
             userimage.setImage(new URL(user.getImageURL(ImageSize.LARGE)).openStream());
         } catch (IOException e) {
@@ -179,7 +182,7 @@ public class LastFMUserDialog extends JFrame {
         usercountryvalue.setText(user.getCountry());
         useragevalue.setText(String.valueOf(user.getAge()));
         usergendervalue.setText(user.getGender());
-        usersubscribervalue.setText(user.isSubscriber() ? PublicValues.language.translate("generic.yes") : PublicValues.language.translate("generic.no"));
+        usersubscribervalue.setText(user.isSubscriber() ? LFMValues.language.translate("generic.yes") : LFMValues.language.translate("generic.no"));
         userplaycountvalue.setText(String.valueOf(user.getPlaycount()));
         userplaylistsvalue.setText(String.valueOf(user.getNumPlaylists()));
         userregisteredvalue.setText(user.getRegisteredDate().toString());
