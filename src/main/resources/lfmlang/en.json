@@ -31,5 +31,7 @@
   "ui.lastfm.chartstracks": "Track Charts",
   "ui.lastfm.account": "User Profile",
   "ui.lastfm.account.open": "Open",
-  "ui.lastfm.settings.border": "LastFM"
+  "ui.lastfm.settings.border": "LastFM",
+  "generic.no": "No",
+  "generic.yes": "Yes"
 }
