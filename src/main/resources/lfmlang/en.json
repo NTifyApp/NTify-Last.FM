@@ -33,5 +33,11 @@
   "ui.lastfm.account.open": "Open",
   "ui.lastfm.settings.border": "LastFM",
   "generic.no": "No",
-  "generic.yes": "Yes"
+  "generic.yes": "Yes",
+  "settings.username": "LastFM Username",
+  "settings.password": "LastFM Password",
+  "loginfirst.dialog.message": "Please log in first",
+  "ui.lastfm.dashboard": "Dashboard",
+  "ui.general.loadmore": "Load more",
+  "ui.title": "Last.FM Dashboard"
 }

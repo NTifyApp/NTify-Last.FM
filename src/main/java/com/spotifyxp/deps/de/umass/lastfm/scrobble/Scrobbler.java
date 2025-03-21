@@ -26,11 +26,13 @@
 
 package com.spotifyxp.deps.de.umass.lastfm.scrobble;
 
+import com.spotifyxp.PublicValues;
 import com.spotifyxp.deps.de.umass.lastfm.Authenticator;
 import com.spotifyxp.deps.de.umass.lastfm.Caller;
 import com.spotifyxp.deps.de.umass.lastfm.Session;
 import com.spotifyxp.deps.de.umass.lastfm.Track;
 import com.spotifyxp.logging.ConsoleLoggingModules;
+import okhttp3.*;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -50,7 +52,7 @@ import static com.spotifyxp.deps.de.umass.util.StringUtilities.md5;
  * All methods in this class, which are communicating with the server, return an instance of {@link ResponseStatus} which contains
  * information if the operation was successful or not.<br/>
  * This class respects the <code>proxy</code> property in the {@link Caller} class in all its HTTP calls. If you need the
- * <code>Scrobbler</code> to use a Proxy server, set it with {@link Caller#setProxy(java.net.Proxy)}.
+ * <code>Scrobbler</code>
  *
  * @author Janni Kovacs
  * @see Track#scrobble(ScrobbleData, Session)
@@ -137,8 +139,8 @@ public class Scrobbler {
 	 * @throws IOException on I/O errors
 	 */
 	private ResponseStatus performHandshake(String url) throws IOException {
-		HttpURLConnection connection = Caller.getInstance().openConnection(url);
-		InputStream is = connection.getInputStream();
+		Request.Builder response = Caller.getInstance().openConnection(url);
+		InputStream is = PublicValues.defaultHttpClient.newCall(response.build()).execute().body().byteStream();
 		BufferedReader r = new BufferedReader(new InputStreamReader(is));
 		String status = r.readLine();
 		int statusCode = ResponseStatus.codeForStatus(status);
@@ -191,14 +193,10 @@ public class Scrobbler {
 				.format("s=%s&a=%s&t=%s&b=%s&l=%s&n=%s&m=", sessionId, encode(artist), encode(track), b, l, n);
 		if (Caller.getInstance().isDebugMode())
 			ConsoleLoggingModules.debug("now playing: " + body);
-		HttpURLConnection urlConnection = Caller.getInstance().openConnection(nowPlayingUrl);
-		urlConnection.setRequestMethod("POST");
-		urlConnection.setDoOutput(true);
-		OutputStream outputStream = urlConnection.getOutputStream();
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-		writer.write(body);
-		writer.close();
-		InputStream is = urlConnection.getInputStream();
+		Request.Builder builder = Caller.getInstance().openConnection(nowPlayingUrl);
+		Response response = PublicValues.defaultHttpClient.newCall(
+				builder.post(RequestBody.create(body, MediaType.get("text/plain"))).build()).execute();
+		InputStream is = response.body().byteStream();
 		BufferedReader r = new BufferedReader(new InputStreamReader(is));
 		String status = r.readLine();
 		r.close();
@@ -259,14 +257,10 @@ public class Scrobbler {
 		String body = builder.toString();
 		if (Caller.getInstance().isDebugMode())
 			ConsoleLoggingModules.debug("submit: " + body);
-		HttpURLConnection urlConnection = Caller.getInstance().openConnection(submissionUrl);
-		urlConnection.setRequestMethod("POST");
-		urlConnection.setDoOutput(true);
-		OutputStream outputStream = urlConnection.getOutputStream();
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-		writer.write(body);
-		writer.close();
-		InputStream is = urlConnection.getInputStream();
+		Request.Builder rbuilder = Caller.getInstance().openConnection(nowPlayingUrl);
+		Response response = PublicValues.defaultHttpClient.newCall(
+				rbuilder.post(RequestBody.create(body, MediaType.get("text/plain"))).build()).execute();
+		InputStream is = response.body().byteStream();
 		BufferedReader r = new BufferedReader(new InputStreamReader(is));
 		String status = r.readLine();
 		r.close();

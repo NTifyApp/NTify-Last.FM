@@ -21,7 +21,6 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class LastFMDialog extends JFrame {
@@ -38,18 +37,18 @@ public class LastFMDialog extends JFrame {
     final DefTable userchartstracks;
     final DefTable chartsartists;
     final DefTable chartstracks;
-    final ArrayList<String> scrobblesuricache = new ArrayList<>();
-    final ArrayList<String> userchartsartistsuricache = new ArrayList<>();
-    final ArrayList<String> userchartsalbumsuricache = new ArrayList<>();
-    final ArrayList<String> userchartstracksuricache = new ArrayList<>();
-    final ArrayList<String> chartsartistsuricache = new ArrayList<>();
-    final ArrayList<String> chartstracksuricache = new ArrayList<>();
     final JScrollPane scrobblestablescroll;
     final JScrollPane userchartsartistsscroll;
     final JScrollPane userchartsalbumsscroll;
     final JScrollPane userchartstracksscroll;
     final JScrollPane chartsartistsscroll;
     final JScrollPane chartstracksscroll;
+    final JLabel scrobbleslabel;
+    final JLabel userchartsartistslabel;
+    final JLabel userchartsalbumlabel;
+    final JLabel userchartstrackslabel;
+    final JLabel chartsartistslabel;
+    final JLabel chartstrackslabel;
     int scrobblescurrent = 0;
     int userchartsartistscurrent = 0;
     int userchartsalbumscurrent = 0;
@@ -58,20 +57,47 @@ public class LastFMDialog extends JFrame {
     int chartstrackscurrent = 0;
     private static JFrame frame;
 
+    private String getSearchString(DefTable table, int row) {
+        String name = table.getModel().getValueAt(row, 0).toString();
+        String artist = table.getModel().getValueAt(row, 1).toString();
+        return String.format("%s %s", name, artist);
+    }
+
+    private void resizeComponents() {
+        Dimension userChartsPreferred = usercharts.getPreferredSize();
+        userChartsPreferred.height = 1690;
+        userchartspanel.setPreferredSize(userChartsPreferred);
+        Dimension chartsPreferred = charts.getPreferredSize();
+        chartsPreferred.height = 1140;
+        chartspanel.setPreferredSize(chartsPreferred);
+
+        scrobbleslabel.setBounds(6, 6, getWidth() - scrobbles.getVerticalScrollBar().getWidth() - 10, 23);
+        scrobblestablescroll.setBounds(6, 32, scrobbles.getViewport().getWidth() - 10, scrobbles.getViewport().getHeight() - 43);
+        userchartsartistslabel.setBounds(6, 6, getWidth() - usercharts.getVerticalScrollBar().getWidth() - 43, 23);
+        userchartsartistsscroll.setBounds(6, 32, getWidth() - usercharts.getVerticalScrollBar().getWidth() - 43, usercharts.getViewport().getHeight() - 43);
+        userchartsalbumlabel.setBounds(6, 570, getWidth() - usercharts.getVerticalScrollBar().getWidth() - 43, 23);
+        userchartsalbumsscroll.setBounds(6, 600, getWidth() - usercharts.getVerticalScrollBar().getWidth() - 43, usercharts.getViewport().getHeight() - 43);
+        userchartstrackslabel.setBounds(6, 1138, getWidth() - usercharts.getVerticalScrollBar().getWidth() - 43, 23);
+        userchartstracksscroll.setBounds(6, 1164, getWidth() - usercharts.getVerticalScrollBar().getWidth() - 43, usercharts.getViewport().getHeight() - 43);
+        chartsartistslabel.setBounds(6, 6, getWidth() - charts.getVerticalScrollBar().getWidth() - 43, 23);
+        chartsartistsscroll.setBounds(6, 32, getWidth() - charts.getVerticalScrollBar().getWidth() - 43, charts.getViewport().getHeight() - 43);
+        chartstrackslabel.setBounds(6, 570, getWidth() - charts.getVerticalScrollBar().getWidth() - 43, 23);
+        chartstracksscroll.setBounds(6, 600, getWidth() - charts.getVerticalScrollBar().getWidth() - 43, charts.getViewport().getHeight() - 43);
+    }
+
     public LastFMDialog() {
         setPreferredSize(new Dimension(800, 600));
-        setTitle("Last.fm - Dashboard");
-        setLayout(null);
+        setTitle(LFMValues.language.translate("ui.title"));
+        setLayout(new BorderLayout());
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
         scrobblespanel = new JPanel();
         userchartspanel = new JPanel();
         chartspanel = new JPanel();
-        userchartspanel.setPreferredSize(new Dimension(800, 1690));
-        chartspanel.setPreferredSize(new Dimension(800, 1140));
         scrobbles = new JScrollPane(scrobblespanel);
         usercharts = new JScrollPane(userchartspanel);
         charts = new JScrollPane(chartspanel);
-        usercharts.setPreferredSize(new Dimension(800, 1690));
-        charts.setPreferredSize(new Dimension(800, 1140));
         scrobblespanel.setLayout(null);
         userchartspanel.setLayout(null);
         chartspanel.setLayout(null);
@@ -85,10 +111,8 @@ public class LastFMDialog extends JFrame {
                 return 800 / tabs.getTabCount();
             }
         });
-        add(tabs);
-        tabs.setBounds(0, 0, 800, 600);
-        JLabel scrobbleslabel = new JLabel(LFMValues.language.translate("ui.lastfm.scrobbles"));
-        scrobbleslabel.setBounds(6, 6, 788, 23);
+        add(tabs, BorderLayout.CENTER);
+        scrobbleslabel = new JLabel(LFMValues.language.translate("ui.lastfm.scrobbles"));
         scrobbleslabel.setForeground(PublicValues.globalFontColor);
         scrobblespanel.add(scrobbleslabel);
         scrobblestable = new DefTable() {
@@ -100,22 +124,21 @@ public class LastFMDialog extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     if(scrobblestable.getModel().getValueAt(scrobblestable.getSelectedRow(), 2).toString().equalsIgnoreCase("load more")) {
-                        Thread thread = new Thread(() -> {
+                        new Thread(() -> {
                             scrobblescurrent++;
                             ((DefaultTableModel) scrobblestable.getModel()).setRowCount(scrobblestable.getRowCount() - 1);
                             for(Track t : User.getRecentTracks(LFMValues.config.getString(ConfigValues.lastfmusername.name), scrobblescurrent, LFMValues.tracklimit, LFMValues.apikey)) {
                                 scrobblestable.addModifyAction(() -> {
                                     ((DefaultTableModel) scrobblestable.getModel()).addRow(new Object[] {t.getName(), t.getArtist(), formatDate(t.getPlayedWhen())});
-                                    scrobblesuricache.add(LastFMConverter.getTrackURIfromName(t.getName()));
                                 });
                             }
                             if(User.getRecentTracks(LFMValues.config.getString(ConfigValues.lastfmusername.name), scrobblescurrent, LFMValues.tracklimit, LFMValues.apikey).getTotalPages() != scrobblescurrent) {
                                 scrobblestable.addModifyAction(() -> ((DefaultTableModel) scrobblestable.getModel()).addRow(new Object[] {LFMValues.language.translate("ui.general.loadmore"), LFMValues.language.translate("ui.general.loadmore"), LFMValues.language.translate("ui.general.loadmore")}));
                             }
-                        });
+                        }).start();
                         return;
                     }
-                    InstanceManager.getSpotifyPlayer().load(scrobblesuricache.get(scrobblestable.getSelectedRow()), true, false);
+                    InstanceManager.getSpotifyPlayer().load(LastFMConverter.getTrackURI(getSearchString(scrobblestable, scrobblestable.getSelectedRow())), true, false);
                     Events.triggerEvent(SpotifyXPEvents.queueUpdate.getName());
                 }
             }
@@ -128,7 +151,6 @@ public class LastFMDialog extends JFrame {
                         LFMValues.language.translate("ui.lastfm.scrobbles.name"), LFMValues.language.translate("ui.lastfm.scrobbles.artist"), LFMValues.language.translate("ui.lastfm.scrobbles.at")
                 }
         ));
-        scrobblestablescroll.setBounds(6, 32, 778, 503);
         scrobblespanel.add(scrobblestablescroll);
 
         tabs.addChangeListener(e -> {
@@ -142,8 +164,7 @@ public class LastFMDialog extends JFrame {
                 parseCharts();
             }
         });
-        JLabel userchartsartistslabel = new JLabel(LFMValues.language.translate("ui.lastfm.userchartsartists"));
-        userchartsartistslabel.setBounds(6, 6, 788, 23);
+        userchartsartistslabel = new JLabel(LFMValues.language.translate("ui.lastfm.userchartsartists"));
         userchartsartistslabel.setForeground(PublicValues.globalFontColor);
         userchartspanel.add(userchartsartistslabel);
         userchartsartists = new DefTable() {
@@ -161,7 +182,6 @@ public class LastFMDialog extends JFrame {
                             for(Artist a : User.getTopArtists(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsartistscurrent, LFMValues.apikey)) {
                                 userchartsartists.addModifyAction(() -> {
                                     ((DefaultTableModel) userchartsartists.getModel()).addRow(new Object[]{a.getName(), a.getPlaycount()});
-                                    userchartsartistsuricache.add(LastFMConverter.getArtistURIfromName(a.getName()));
                                 });
                             }
                             if(User.getTopArtists(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsartistscurrent, LFMValues.apikey).getTotalPages() != userchartsartistscurrent) {
@@ -172,7 +192,7 @@ public class LastFMDialog extends JFrame {
                         return;
                     }
                     ContentPanel.switchView(ContentPanel.lastView);
-                    ContentPanel.showArtistPanel(userchartsartistsuricache.get(userchartsartists.getSelectedRow()));
+                    ContentPanel.showArtistPanel(LastFMConverter.getArtistURI(getSearchString(userchartsartists, userchartsartists.getSelectedRow())));
                 }
             }
         });
@@ -184,10 +204,8 @@ public class LastFMDialog extends JFrame {
                 }
         ));
         userchartsartistsscroll = new JScrollPane(userchartsartists);
-        userchartsartistsscroll.setBounds(6, 32, 778, 503);
         userchartspanel.add(userchartsartistsscroll);
-        JLabel userchartsalbumlabel = new JLabel(LFMValues.language.translate("ui.lastfm.userchartsalbums"));
-        userchartsalbumlabel.setBounds(6, 570, 788, 23);
+        userchartsalbumlabel = new JLabel(LFMValues.language.translate("ui.lastfm.userchartsalbums"));
         userchartsalbumlabel.setForeground(PublicValues.globalFontColor);
         userchartspanel.add(userchartsalbumlabel);
         userchartsalbums = new DefTable() {
@@ -211,7 +229,6 @@ public class LastFMDialog extends JFrame {
                         for(Album a : User.getTopAlbums(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsalbumscurrent, LFMValues.apikey)) {
                             userchartsalbums.addModifyAction(() -> {
                                 ((DefaultTableModel) userchartsalbums.getModel()).addRow(new Object[]{a.getName(), a.getArtist(), a.getPlaycount()});
-                                userchartsalbumsuricache.add(LastFMConverter.getAlbumURIfromName(a.getName()));
                             });
                         }
                         if(User.getTopAlbums(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsalbumscurrent, LFMValues.apikey).getTotalPages() != userchartsalbumscurrent) {
@@ -223,15 +240,13 @@ public class LastFMDialog extends JFrame {
                 }
                 if(e.getClickCount() == 2) {
                     ContentPanel.switchView(ContentPanel.lastView);
-                    ContentPanel.trackPanel.open(userchartsalbumsuricache.get(userchartsalbums.getSelectedRow()), HomePanel.ContentTypes.album);
+                    ContentPanel.trackPanel.open(LastFMConverter.getAlbumURI(getSearchString(userchartsalbums, userchartsalbums.getSelectedRow())), HomePanel.ContentTypes.album);
                 }
             }
         });
         userchartsalbumsscroll = new JScrollPane(userchartsalbums);
-        userchartsalbumsscroll.setBounds(6, 600, 778, 503);
         userchartspanel.add(userchartsalbumsscroll);
-        JLabel userchartstrackslabel = new JLabel(LFMValues.language.translate("ui.lastfm.userchartstracks"));
-        userchartstrackslabel.setBounds(6, 1138, 788, 23);
+        userchartstrackslabel = new JLabel(LFMValues.language.translate("ui.lastfm.userchartstracks"));
         userchartstrackslabel.setForeground(PublicValues.globalFontColor);
         userchartspanel.add(userchartstrackslabel);
         userchartstracks = new DefTable() {
@@ -249,7 +264,6 @@ public class LastFMDialog extends JFrame {
                             for(Track t : User.getTopTracks(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartstrackscurrent, LFMValues.apikey)) {
                                 userchartstracks.addModifyAction(() -> {
                                     ((DefaultTableModel) userchartstracks.getModel()).addRow(new Object[]{t.getName(), t.getArtist(), t.getPlaycount()});
-                                    userchartstracksuricache.add(LastFMConverter.getTrackURIfromName(t.getName()));
                                 });
                             }
                             if(User.getTopTracks(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartstrackscurrent, LFMValues.apikey).getTotalPages() != userchartstrackscurrent) {
@@ -259,7 +273,7 @@ public class LastFMDialog extends JFrame {
                         thread.start();
                         return;
                     }
-                    InstanceManager.getSpotifyPlayer().load(userchartstracksuricache.get(userchartstracks.getSelectedRow()), true, false);
+                    InstanceManager.getSpotifyPlayer().load(LastFMConverter.getTrackURI(getSearchString(userchartstracks, userchartstracks.getSelectedRow())), true, false);
                     Events.triggerEvent(SpotifyXPEvents.queueUpdate.getName());
                 }
             }
@@ -272,11 +286,9 @@ public class LastFMDialog extends JFrame {
                 }
         ));
         userchartstracksscroll = new JScrollPane(userchartstracks);
-        userchartstracksscroll.setBounds(6, 1164, 778, 503);
         userchartspanel.add(userchartstracksscroll);
 
-        JLabel chartsartistslabel = new JLabel(LFMValues.language.translate("ui.lastfm.chartsartists"));
-        chartsartistslabel.setBounds(6, 6, 788, 23);
+        chartsartistslabel = new JLabel(LFMValues.language.translate("ui.lastfm.chartsartists"));
         chartsartistslabel.setForeground(PublicValues.globalFontColor);
         chartspanel.add(chartsartistslabel);
         chartsartists = new DefTable() {
@@ -294,7 +306,6 @@ public class LastFMDialog extends JFrame {
                             for(Artist a : Chart.getTopArtists(LFMValues.tracklimit, chartsartistscurrent, LFMValues.apikey)) {
                                 chartsartists.addModifyAction(() -> {
                                     ((DefaultTableModel) chartsartists.getModel()).addRow(new Object[]{a.getName(), a.getPlaycount()});
-                                    chartsartistsuricache.add(LastFMConverter.getArtistURIfromName(a.getName()));
                                 });
                             }
                             if(Chart.getTopArtists(LFMValues.tracklimit, chartsartistscurrent, LFMValues.apikey).getTotalPages() != chartsartistscurrent) {
@@ -305,7 +316,7 @@ public class LastFMDialog extends JFrame {
                         return;
                     }
                     ContentPanel.switchView(ContentPanel.lastView);
-                    ContentPanel.showArtistPanel(chartsartistsuricache.get(chartsartists.getSelectedRow()));
+                    ContentPanel.showArtistPanel(LastFMConverter.getArtistURI(getSearchString(chartsartists, chartsartists.getSelectedRow())));
                 }
             }
         });
@@ -317,10 +328,8 @@ public class LastFMDialog extends JFrame {
                 }
         ));
         chartsartistsscroll = new JScrollPane(chartsartists);
-        chartsartistsscroll.setBounds(6, 32, 778, 503);
         chartspanel.add(chartsartistsscroll);
-        JLabel chartstrackslabel = new JLabel(LFMValues.language.translate("ui.lastfm.chartstracks"));
-        chartstrackslabel.setBounds(6, 570, 788, 23);
+        chartstrackslabel = new JLabel(LFMValues.language.translate("ui.lastfm.chartstracks"));
         chartstrackslabel.setForeground(PublicValues.globalFontColor);
         chartspanel.add(chartstrackslabel);
         chartstracks = new DefTable() {
@@ -338,7 +347,6 @@ public class LastFMDialog extends JFrame {
                             for(Track t : Chart.getTopTracks(LFMValues.tracklimit, chartstrackscurrent, LFMValues.apikey)) {
                                 chartstracks.addModifyAction(() -> {
                                     ((DefaultTableModel) chartstracks.getModel()).addRow(new Object[]{t.getName(), t.getArtist(), t.getPlaycount()});
-                                    chartstracksuricache.add(LastFMConverter.getTrackURIfromName(t.getName()));
                                 });
                             }
                             if(Chart.getTopTracks(LFMValues.tracklimit, chartstrackscurrent, LFMValues.apikey).getTotalPages() != chartstrackscurrent) {
@@ -348,7 +356,7 @@ public class LastFMDialog extends JFrame {
                         thread.start();
                         return;
                     }
-                    InstanceManager.getSpotifyPlayer().load(chartstracksuricache.get(chartstracks.getSelectedRow()), true, false);
+                    InstanceManager.getSpotifyPlayer().load(LastFMConverter.getTrackURI(getSearchString(chartstracks, chartstracks.getSelectedRow())), true, false);
                     Events.triggerEvent(SpotifyXPEvents.queueUpdate.getName());
                 }
             }
@@ -361,18 +369,7 @@ public class LastFMDialog extends JFrame {
                 }
         ));
         chartstracksscroll = new JScrollPane(chartstracks);
-        chartstracksscroll.setBounds(6, 600, 778, 503);
         chartspanel.add(chartstracksscroll);
-        JMenuBar bar = new JMenuBar();
-        JMenu account = new JMenu(LFMValues.language.translate("ui.lastfm.account"));
-        JMenuItem open = new JMenuItem(LFMValues.language.translate("ui.lastfm.account.open"));
-        account.add(open);
-        bar.add(account);
-        open.addActionListener(e -> {
-            LastFMUserDialog dialog = new LastFMUserDialog();
-            dialog.open();
-        });
-        setJMenuBar(bar);
         parseScrobbles();
         frame = this;
     }
@@ -408,7 +405,6 @@ public class LastFMDialog extends JFrame {
                 scrobblestable.addModifyAction(() -> {
                     try {
                         ((DefaultTableModel) scrobblestable.getModel()).addRow(new Object[]{t1.getName(), t1.getArtist(), formatDate(t1.getPlayedWhen())});
-                        scrobblesuricache.add(LastFMConverter.getTrackURIfromName(t1.getName()));
                     }catch (NullPointerException e) {
                         ConsoleLogging.Throwable(e);
                     }
@@ -430,7 +426,6 @@ public class LastFMDialog extends JFrame {
             for(Artist a : User.getTopArtists(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsartistscurrent, LFMValues.apikey)) {
                 userchartsartists.addModifyAction(() -> {
                     ((DefaultTableModel) userchartsartists.getModel()).addRow(new Object[]{a.getName(), a.getPlaycount()});
-                    userchartsartistsuricache.add(LastFMConverter.getArtistURIfromName(a.getName()));
                 });
             }
             if(User.getTopArtists(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsartistscurrent, LFMValues.apikey).getTotalPages() != userchartsartistscurrent) {
@@ -444,7 +439,6 @@ public class LastFMDialog extends JFrame {
             for(Album a : User.getTopAlbums(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsalbumscurrent, LFMValues.apikey)) {
                 userchartsalbums.addModifyAction(() -> {
                     ((DefaultTableModel) userchartsalbums.getModel()).addRow(new Object[]{a.getName(), a.getArtist(), a.getPlaycount()});
-                    userchartsalbumsuricache.add(LastFMConverter.getAlbumURIfromName(a.getName()));
                 });
             }
             if(User.getTopAlbums(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartsalbumscurrent, LFMValues.apikey).getTotalPages() != userchartsalbumscurrent) {
@@ -458,7 +452,6 @@ public class LastFMDialog extends JFrame {
             for(Track t : User.getTopTracks(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartstrackscurrent, LFMValues.apikey)) {
                 userchartstracks.addModifyAction(() -> {
                     ((DefaultTableModel) userchartstracks.getModel()).addRow(new Object[]{t.getName(), t.getArtist(), t.getPlaycount()});
-                    userchartstracksuricache.add(LastFMConverter.getTrackURIfromName(t.getName()));
                 });
             }
             if(User.getTopTracks(LFMValues.config.getString(ConfigValues.lastfmusername.name), Period.OVERALL, LFMValues.tracklimit, userchartstrackscurrent, LFMValues.apikey).getTotalPages() != userchartstrackscurrent) {
@@ -477,7 +470,6 @@ public class LastFMDialog extends JFrame {
             for(Artist a : Chart.getTopArtists(LFMValues.tracklimit, chartsartistscurrent, LFMValues.apikey)) {
                 chartsartists.addModifyAction(() -> {
                     ((DefaultTableModel) chartsartists.getModel()).addRow(new Object[]{a.getName(), a.getPlaycount()});
-                    chartsartistsuricache.add(LastFMConverter.getArtistURIfromName(a.getName()));
                 });
             }
             if(Chart.getTopArtists(LFMValues.tracklimit, chartsartistscurrent, LFMValues.apikey).getTotalPages() != chartsartistscurrent) {
@@ -491,7 +483,6 @@ public class LastFMDialog extends JFrame {
             for(Track t : Chart.getTopTracks(LFMValues.tracklimit, chartstrackscurrent, LFMValues.apikey)) {
                 chartstracks.addModifyAction(() -> {
                     ((DefaultTableModel) chartstracks.getModel()).addRow(new Object[]{t.getName(), t.getArtist(), t.getPlaycount()});
-                    chartstracksuricache.add(LastFMConverter.getTrackURIfromName(t.getName()));
                 });
             }
             if(Chart.getTopTracks(LFMValues.tracklimit, chartstrackscurrent, LFMValues.apikey).getTotalPages() != chartstrackscurrent) {
@@ -499,6 +490,14 @@ public class LastFMDialog extends JFrame {
             }
         });
         trackthread.start();
+    }
+
+    @Override
+    public void open() {
+        super.open();
+        resizeComponents();
+        revalidate();
+        repaint();
     }
 
     public static void openWhenLoggedIn() {
@@ -509,7 +508,7 @@ public class LastFMDialog extends JFrame {
         }catch (NullPointerException ignored) {
         }
         if(LFMValues.config.getString(ConfigValues.lastfmusername.name).isEmpty() || LFMValues.config.getString(ConfigValues.lastfmusername.name).isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please log in first");
+            JOptionPane.showMessageDialog(ContentPanel.frame, LFMValues.language.translate("loginfirst.dialog.message"));
             return;
         }
         LastFMDialog dialog = new LastFMDialog();

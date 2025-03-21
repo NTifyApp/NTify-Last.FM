@@ -16,21 +16,6 @@ import java.awt.event.ActionListener;
 public class Initiator implements InjectorInterface {
 
     @Override
-    public String getIdentifier() {
-        return "LastFMIntegration";
-    }
-
-    @Override
-    public String getVersion() {
-        return "v1.0.1";
-    }
-
-    @Override
-    public String getAuthor() {
-        return "Werwolf2303";
-    }
-
-    @Override
     public void init() {
         LFMValues.config = new Config();
         LFMValues.config.checkConfig();
@@ -46,12 +31,13 @@ public class Initiator implements InjectorInterface {
                 new LastFM();
             }
         });
+
         Events.subscribe(SpotifyXPEvents.onFrameReady.getName(), new EventSubscriber() {
             @Override
             public void run(Object... data) {
                 new LastFMSettings();
                 JMenu lastfm = new JMenu("Last.fm");
-                JMenuItem lastfmdashboard = new JMenuItem("Dashboard"); //ToDo: Translate
+                JMenuItem lastfmdashboard = new JMenuItem(LFMValues.language.translate("ui.lastfm.dashboard"));
                 JMenuItem lastfmuserinfo = new JMenuItem(LFMValues.language.translate("ui.lastfm.userinfo"));
                 lastfm.add(lastfmdashboard);
                 lastfm.add(lastfmuserinfo);
@@ -59,7 +45,7 @@ public class Initiator implements InjectorInterface {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(LFMValues.config.getString(ConfigValues.lastfmusername.name).isEmpty() || LFMValues.config.getString(ConfigValues.lastfmpassword.name).isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Please log in first");
+                            JOptionPane.showMessageDialog(null, LFMValues.language.translate("loginfirst.dialog.message"));
                             return;
                         }
                         new LastFMUserDialog().open();

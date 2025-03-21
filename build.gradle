@@ -17,12 +17,12 @@ dependencies {
     def dir = file("../SpotifyXP")
     def repo_jar_file = file("../SpotifyXP.jar")
     if (dir.exists() && dir.isDirectory()) {
-        compileOnly files("${projectDir}/../SpotifyXP/target/SpotifyXP.jar")
+        implementation files("${projectDir}/../SpotifyXP/target/SpotifyXP.jar")
     } else {
         if (repo_jar_file.exists() && !repo_jar_file.isDirectory()) {
-            compileOnly files(repo_jar_file)
+            implementation files(repo_jar_file)
         }else {
-            compileOnly files("${projectDir}/SpotifyXP/target/SpotifyXP.jar")
+            implementation files("${projectDir}/SpotifyXP/target/SpotifyXP.jar")
         }
     }
 }

@@ -4,23 +4,23 @@ import com.spotifyxp.manager.InstanceManager;
 import java.io.IOException;
 
 public class LastFMConverter {
-    public static String getArtistURIfromName(String name) {
+    public static String getArtistURI(String query) {
         try {
-            return InstanceManager.getSpotifyApi().searchArtists(name).build().execute().getItems()[0].getUri();
+            return InstanceManager.getSpotifyApi().searchArtists(query).build().execute().getItems()[0].getUri();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public static String getAlbumURIfromName(String name) {
+    public static String getAlbumURI(String query) {
         try {
-            return InstanceManager.getSpotifyApi().searchAlbums(name).build().execute().getItems()[0].getUri();
+            return InstanceManager.getSpotifyApi().searchAlbums(query).build().execute().getItems()[0].getUri();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    public static String getTrackURIfromName(String name) {
+    public static String getTrackURI(String query) {
         try {
-            return InstanceManager.getSpotifyApi().searchTracks(name).build().execute().getItems()[0].getUri();
+            return InstanceManager.getSpotifyApi().searchTracks(query).build().execute().getItems()[0].getUri();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

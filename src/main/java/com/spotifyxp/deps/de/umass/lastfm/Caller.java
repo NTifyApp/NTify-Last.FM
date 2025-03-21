@@ -26,10 +26,17 @@
 
 package com.spotifyxp.deps.de.umass.lastfm;
 
+import com.spotifyxp.PublicValues;
 import com.spotifyxp.deps.de.umass.lastfm.Result.Status;
 import com.spotifyxp.deps.de.umass.lastfm.cache.Cache;
 import com.spotifyxp.deps.de.umass.lastfm.cache.FileSystemCache;
+import com.spotifyxp.enums.HttpStatusCodes;
 import com.spotifyxp.lastfm.LFMValues;
+import com.spotifyxp.utils.ApplicationUtils;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -75,9 +82,6 @@ public class Caller {
 	
 	private String apiRootUrl = DEFAULT_API_ROOT;
 
-	private Proxy proxy;
-	private String userAgent = "tst";
-
 	private boolean debugMode = false;
 
 	private Cache cache;
@@ -103,33 +107,6 @@ public class Caller {
 	 */
 	public void setApiRootUrl(String apiRootUrl) {
 		this.apiRootUrl = apiRootUrl;
-	}
-
-	/**
-	 * Sets a {@link Proxy} instance this Caller will use for all upcoming HTTP requests. May be <code>null</code>.
-	 *
-	 * @param proxy A <code>Proxy</code> or <code>null</code>.
-	 */
-	public void setProxy(Proxy proxy) {
-		this.proxy = proxy;
-	}
-
-	public Proxy getProxy() {
-		return proxy;
-	}
-
-	/**
-	 * Sets a User Agent this Caller will use for all upcoming HTTP requests. For testing purposes use "tst".
-	 * If you distribute your application use an identifiable User-Agent.
-	 *
-	 * @param userAgent a User-Agent string
-	 */
-	public void setUserAgent(String userAgent) {
-		this.userAgent = userAgent;
-	}
-
-	public String getUserAgent() {
-		return userAgent;
 	}
 
 	/**
@@ -221,8 +198,8 @@ public class Caller {
 				params.put("api_sig", Authenticator.createSignature(method, params, session.getSecret()));
 			}
 			try {
-				HttpURLConnection urlConnection = openPostConnection(method, params);
-				inputStream = getInputStreamFromConnection(urlConnection);
+				Response response = openPostConnection(method, params);
+				inputStream = getInputStreamFromConnection(response);
 			} catch (IOException e) {
 				throw new CallException(e);
 			}
@@ -277,15 +254,15 @@ public class Caller {
 				params.put("api_sig", Authenticator.createSignature(method, params, session.getSecret()));
 			}
 			try {
-				HttpURLConnection urlConnection = openPostConnection(method, params);
-				inputStream = getInputStreamFromConnection(urlConnection);
+				Response response = openPostConnection(method, params);
+				inputStream = getInputStreamFromConnection(response);
 
 				if (inputStream == null) {
-					this.lastResult = Result.createHttpErrorResult(urlConnection.getResponseCode(), urlConnection.getResponseMessage());
+					this.lastResult = Result.createHttpErrorResult(response.code(), response.body().string());
 					return lastResult;
 				} else {
 					if (cache != null) {
-						long expires = urlConnection.getHeaderFieldDate("Expires", -1);
+						long expires = Long.parseLong(response.header("Expires", "-1"));
 						if (expires == -1) {
 							expires = cache.findExpirationDate(method, params);
 						}
@@ -343,8 +320,8 @@ public class Caller {
 				params.put("api_sig", Authenticator.createSignature(method, params, session.getSecret()));
 			}
 			try {
-				HttpURLConnection urlConnection = openPostConnection(method, params);
-				inputStream = getInputStreamFromConnection(urlConnection);
+				Response response = openPostConnection(method, params);
+				inputStream = getInputStreamFromConnection(response);
 				return IOUtils.toString(inputStream, Charset.defaultCharset());
 			} catch (IOException e) {
 				throw new CallException(e);
@@ -361,44 +338,33 @@ public class Caller {
 	}
 
 	/**
-	 * Creates a new {@link HttpURLConnection}, sets the proxy, if available, and sets the User-Agent property.
+	 * Creates a new {@link Response}, and sets the User-Agent property.
 	 *
 	 * @param url URL to connect to
 	 * @return a new connection.
 	 * @throws IOException if an I/O exception occurs.
 	 */
-	public HttpURLConnection openConnection(String url) throws IOException {
+	public Request.Builder openConnection(String url) throws IOException {
 		log.info("Open connection: " + url);
-		URL u = new URL(url);
-		HttpURLConnection urlConnection;
-		if (proxy != null)
-			urlConnection = (HttpURLConnection) u.openConnection(proxy);
-		else
-			urlConnection = (HttpURLConnection) u.openConnection();
-		urlConnection.setRequestProperty("User-Agent", userAgent);
-		return urlConnection;
+		return new Request.Builder()
+				.url(url)
+				.header("User-Agent", ApplicationUtils.getUserAgent());
 	}
 
-	private HttpURLConnection openPostConnection(String method, Map<String, String> params) throws IOException {
-		HttpURLConnection urlConnection = openConnection(apiRootUrl);
-		urlConnection.setRequestMethod("POST");
-		urlConnection.setDoOutput(true);
-		OutputStream outputStream = urlConnection.getOutputStream();
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-		String post = buildPostBody(method, params);
-		log.info("Post body: " + post);
-		writer.write(post);
-		writer.close();
-		return urlConnection;
+	private Response openPostConnection(String method, Map<String, String> params) throws IOException {
+		Request.Builder request = openConnection(apiRootUrl);
+		return PublicValues.defaultHttpClient.newCall(
+				request.post(RequestBody.create(buildPostBody(method, params), MediaType.get("text/plain"))).build()
+		).execute();
 	}
 
-	private InputStream getInputStreamFromConnection(HttpURLConnection connection) throws IOException {
-		int responseCode = connection.getResponseCode();
+	private InputStream getInputStreamFromConnection(Response response) throws IOException {
+		int responseCode = response.code();
 
-		if (responseCode == HttpURLConnection.HTTP_FORBIDDEN || responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
-			return connection.getErrorStream();
+		if (responseCode == HttpStatusCodes.FORBIDDEN.getValue() || responseCode == HttpStatusCodes.BAD_REQUEST.getValue()) {
+			return response.body().byteStream();
 		} else if (responseCode == HttpURLConnection.HTTP_OK) {
-			return connection.getInputStream();
+			return response.body().byteStream();
 		}
 
 		return null;
