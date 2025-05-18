@@ -1,6 +1,8 @@
 package com.spotifyxp.lastfm;
 
 import com.spotifyxp.lastfm.config.Config;
+import com.spotifyxp.lib.libLanguage;
+
 import java.util.Base64;
 
 public class LFMValues {

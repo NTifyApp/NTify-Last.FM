@@ -7,22 +7,22 @@ version = '1.0-NIGHTLY'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
-archivesBaseName = 'SpotifyXP-Last.FM'
+archivesBaseName = 'NTify-Last.FM'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    def dir = file("../SpotifyXP")
-    def repo_jar_file = file("../SpotifyXP.jar")
+    def dir = file("../NTify")
+    def repo_jar_file = file("../NTify.jar")
     if (dir.exists() && dir.isDirectory()) {
-        implementation files("${projectDir}/../SpotifyXP/target/SpotifyXP.jar")
+        implementation files("${projectDir}/../NTify/target/NTify.jar")
     } else {
         if (repo_jar_file.exists() && !repo_jar_file.isDirectory()) {
             implementation files(repo_jar_file)
         }else {
-            implementation files("${projectDir}/SpotifyXP/target/SpotifyXP.jar")
+            implementation files("${projectDir}/NTify/target/NTify.jar")
         }
     }
 }
@@ -30,7 +30,7 @@ dependencies {
 task buildJar(type: Jar) {
     from configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     from sourceSets.main.output
-    archiveFileName = 'SpotifyXP-Last.FM.jar'
+    archiveFileName = 'NTify-Last.FM.jar'
 }
 
 build.dependsOn buildJar

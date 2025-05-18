@@ -6,6 +6,7 @@ import com.spotifyxp.events.SpotifyXPEvents;
 import com.spotifyxp.injector.InjectorInterface;
 import com.spotifyxp.lastfm.config.Config;
 import com.spotifyxp.lastfm.config.ConfigValues;
+import com.spotifyxp.lib.libLanguage;
 import com.spotifyxp.panels.ContentPanel;
 import com.spotifyxp.panels.SplashPanel;
 
@@ -20,7 +21,7 @@ public class Initiator implements InjectorInterface {
         LFMValues.config = new Config();
         LFMValues.config.checkConfig();
 
-        LFMValues.language = new libLanguage();
+        LFMValues.language = new libLanguage(Initiator.class);
         LFMValues.language.setNoAutoFindLanguage("en"); // Only english is supported for now
         LFMValues.language.setLanguageFolder("lfmlang");
 

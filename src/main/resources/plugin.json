@@ -1,8 +1,8 @@
 {
   "main": "com.spotifyxp.lastfm.Initiator",
-  "name": "SpotifyXP-Last.FM",
+  "name": "NTify-Last.FM",
   "author": "Werwolf2303",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Provides support for Last.FM",
   "identifier": "f5c61aeb-048f-4ed1-acd3-ee2ba8903640",
   "minversion": "adb22cb",
