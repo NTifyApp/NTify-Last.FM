@@ -39,5 +39,6 @@
   "loginfirst.dialog.message": "Please log in first",
   "ui.lastfm.dashboard": "Dashboard",
   "ui.general.loadmore": "Load more",
-  "ui.title": "Last.FM Dashboard"
+  "ui.title": "Last.FM Dashboard",
+  "ui.lastfm.noapikey.message": "LastFM: No API key provided. Please set it in the settings"
 }

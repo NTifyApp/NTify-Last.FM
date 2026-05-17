@@ -1,0 +1,3 @@
+[submodule "lastfm-java"]
+	path = lastfm-java
+	url = https://github.com/NTifyApp/lastfm-java

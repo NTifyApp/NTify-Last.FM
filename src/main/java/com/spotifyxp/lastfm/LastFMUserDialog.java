@@ -1,10 +1,9 @@
 package com.spotifyxp.lastfm;
 
-import com.spotifyxp.deps.de.umass.lastfm.Authenticator;
-import com.spotifyxp.deps.de.umass.lastfm.ImageSize;
-import com.spotifyxp.deps.de.umass.lastfm.User;
-import com.spotifyxp.deps.de.umass.lastfm.exceptions.BadCredentialsException;
-import com.spotifyxp.lastfm.config.ConfigValues;
+import de.umass.lastfm.Authenticator;
+import de.umass.lastfm.CallException;
+import de.umass.lastfm.ImageSize;
+import de.umass.lastfm.User;
 import com.spotifyxp.swingextension.JFrame;
 import com.spotifyxp.swingextension.JImagePanel;
 
@@ -47,7 +46,7 @@ public class LastFMUserDialog extends JFrame {
         userimage.setBounds(80, 6, 180, 180);
         add(userimage);
 
-        setTitle("Last.fm - " + LFMValues.config.getString(ConfigValues.lastfmusername.name));
+        setTitle("Last.fm - " + LFMValues.config.getFields().username);
 
         userusername = new JLabel(LFMValues.language.translate("ui.lastfm.user.username"));
         userusername.setBounds(6, 204, 130, 16);
@@ -162,7 +161,7 @@ public class LastFMUserDialog extends JFrame {
             public void run() {
                 try {
                     loadValues();
-                } catch (BadCredentialsException e) {
+                } catch (CallException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -170,8 +169,8 @@ public class LastFMUserDialog extends JFrame {
         thread.start();
     }
     
-    void loadValues() throws BadCredentialsException {
-        User user = User.getInfo(Authenticator.getMobileSession(LFMValues.config.getString(ConfigValues.lastfmusername.name), LFMValues.config.getString(ConfigValues.lastfmpassword.name), LFMValues.apikey, LFMValues.apisecret));
+    void loadValues() throws CallException {
+        User user = User.getInfo(LFMValues.getSession());
         try {
             userimage.setImage(new URL(user.getImageURL(ImageSize.LARGE)).openStream());
         } catch (IOException e) {
@@ -186,8 +185,5 @@ public class LastFMUserDialog extends JFrame {
         userplaycountvalue.setText(String.valueOf(user.getPlaycount()));
         userplaylistsvalue.setText(String.valueOf(user.getNumPlaylists()));
         userregisteredvalue.setText(user.getRegisteredDate().toString());
-        userartistsvalue.setText(user.getArtists());
-        useralbumsvalue.setText(user.getAlbums());
-        usertracksvalue.setText(user.getTracks());
     }
 }

@@ -2,8 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../SpotifyXP/deps/JavaSetupTool" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../SpotifyXP/deps/mpris-java" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../SpotifyXP/deps/vlcj" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lastfm-java" vcs="Git" />
   </component>
 </project>

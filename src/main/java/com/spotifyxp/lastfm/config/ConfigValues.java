@@ -1,36 +1,31 @@
 package com.spotifyxp.lastfm.config;
 
-import com.spotifyxp.audio.Quality;
+import com.spotifyxp.configuration.Config;
+import com.spotifyxp.configuration.IConfig;
+import com.spotifyxp.lastfm.LFMValues;
 
-/**
- * Holds all registered config values with their type and default value
- */
-public enum ConfigValues {
-    lastfmpassword("lastfm.password", ConfigValueTypes.STRING, ""),
-    lastfmusername("lastfm.username", ConfigValueTypes.STRING, ""),
-    lastfmtracklimit("lastfm.user.settings.tracklimit", ConfigValueTypes.INT, 20),
-    lastfmartistlimit("lastfm.user.settings.artistlimit",ConfigValueTypes.INT, 10);
+public class ConfigValues implements IConfig {
 
-    public final String name;
-    public final ConfigValueTypes type;
-    public final Object defaultValue;
-    ConfigValues(String name, ConfigValueTypes type, Object defaultValue) {
-        this.name = name;
-        this.type = type;
-        this.defaultValue = defaultValue;
-    }
+    @Config.Text(id = "lastfm.username", category = "ui.lastfm.settings.border")
+    public String username = "";
 
-    /**
-     * Returns the ConfigValues instance for the config value
-     * @param name name of the config value e.g. user.settings.spconnect
-     * @return ConfigValues
-     */
-    public static ConfigValues get(String name) {
-        for(ConfigValues value : ConfigValues.values()) {
-            if(value.name.equals(name)) {
-                return value;
-            }
-        }
-        return null;
+    @Config.Text(id = "lastfm.password", category = "ui.lastfm.settings.border")
+    public String password = "";
+
+    @Config.Numbers(id = "lastfm.user.settings.tracklimit", category = "ui.lastfm.settings.border")
+    public int trackLimit = 20;
+
+    @Config.Numbers(id ="lastfm.user.settings.artistlimit", category = "ui.lastfm.settings.border")
+    public int artistLimit = 10;
+
+    @Config.Text(id = "lastfm.api.key", category = "ui.lastfm.settings.border")
+    public String apiKey = "";
+
+    @Config.Text(id = "lastfm.api.shared.secret", category = "ui.lastfm.settings.border")
+    public String apiSharedSecret = "";
+
+    @Override
+    public String translate(String s) {
+        return LFMValues.language.translate(s);
     }
 }

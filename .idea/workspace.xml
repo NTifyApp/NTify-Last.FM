@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4173b3a1-470a-4bc6-bf8d-a4d9447a902d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lastfm-java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/LastFMIntegration_Werwolf2303.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/.DEPINFO" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Album.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Artist.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Authenticator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/BuyLink.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/CallException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Caller.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Chart.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Event.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Geo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Group.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Image.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/ImageHolder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/ImageSize.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/ItemFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/ItemFactoryBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Library.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/MusicEntry.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/PaginatedResult.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Period.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Playlist.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Radio.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/ResponseBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Result.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Session.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Shout.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Tag.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Tasteometer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Track.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/Venue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/cache/Cache.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/cache/DatabaseCache.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/cache/DefaultExpirationPolicy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/cache/ExpirationPolicy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/cache/FileSystemCache.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/cache/MemoryCache.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/cache/ScrobbleCache.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/exceptions/BadCredentialsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/IgnoredMessageCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/Rating.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/ResponseStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/ScrobbleData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/ScrobbleResult.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/Scrobbler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/Source.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/lastfm/scrobble/SubmissionData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/util/MapUtilities.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/util/StringUtilities.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/deps/de/umass/xml/DomElement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/Initiator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/Initiator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LFMScrobbling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LFMScrobbling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LFMValues.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LFMValues.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LastFM.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LastFMConverter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LastFMDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LastFMDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LastFMSettings.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LastFMUserDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/LastFMUserDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/config/Config.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/config/ConfigValueTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/spotifyxp/lastfm/config/ConfigValues.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/lfmlang/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/lfmlang/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/home/werwolf2303/Documents/GitHub/NTify-Last.FM" value="3Dr6d6yeMJN8xuDFf9KdzEJ6tIV" />
+    </persistenceIdMap>
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="3Dr6d6yeMJN8xuDFf9KdzEJ6tIV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Shell Script.Build Jar.executor": "Run",
+    "Shell Script.Copy Jar To NTify.executor": "Run",
+    "Shell Script.Run.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/werwolf2303/Documents/GitHub/NTify-Last.FM/build.sh",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Shell Script.Run">
+    <configuration name="Build Jar" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/build.sh" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="/usr/bin/bash" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Copy Jar To NTify" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="cp build/libs/NTify-Last.FM.jar ../NTify/data/Extensions" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="/usr/bin/bash" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2">
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="Build Jar" run_configuration_type="ShConfigurationType" />
+      </method>
+    </configuration>
+    <configuration name="Run" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="java -jar ../NTify/target/NTify.jar --custom-savedir=&quot;$PROJECT_DIR$/../NTify/data&quot; --debug --devMode --setup-complete" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="/usr/bin/bash" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2">
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="Copy Jar To NTify" run_configuration_type="ShConfigurationType" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Shell Script.Build Jar" />
+      <item itemvalue="Shell Script.Copy Jar To NTify" />
+      <item itemvalue="Shell Script.Run" />
+    </list>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4173b3a1-470a-4bc6-bf8d-a4d9447a902d" name="Changes" comment="" />
+      <created>1779027925945</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1779027925945</updated>
+      <workItem from="1779027927209" duration="316000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

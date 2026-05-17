@@ -1,15 +1,27 @@
 package com.spotifyxp.lastfm;
 
-import com.spotifyxp.lastfm.config.Config;
+import com.spotifyxp.configuration.Config;
+import com.spotifyxp.lastfm.config.ConfigValues;
 import com.spotifyxp.lib.libLanguage;
-
-import java.util.Base64;
+import com.spotifyxp.manager.InstanceManager;
+import de.umass.lastfm.Authenticator;
+import de.umass.lastfm.Session;
 
 public class LFMValues {
-    public static final String apikey = new String(Base64.getDecoder().decode("YTUxMmFjYjMyMjA1MTMyZTkxOWUzMGVjMmNlYTE4ZDc="));
-    public static final String apisecret = new String(Base64.getDecoder().decode("MmQzMGM3ZmJjYzVkMDhkYmVkMDgzOGU5NTU0ZTAwYTk="));
-    public static int artistlimit = 10;
-    public static int tracklimit = 20;
     public static libLanguage language;
-    public static Config config;
+    public static Config.RuntimeConfig<ConfigValues> config;
+    public static boolean lastfmInitialized = false;
+    private static Session session;
+
+    public static Session getSession() {
+        if(session == null) {
+            session = Authenticator.getMobileSession(
+                    LFMValues.config.getFields().username,
+                    LFMValues.config.getFields().password,
+                    LFMValues.config.getFields().apiKey,
+                    LFMValues.config.getFields().apiSharedSecret
+            );
+        }
+        return session;
+    }
 }
