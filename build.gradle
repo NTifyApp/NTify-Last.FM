@@ -32,4 +32,8 @@ task buildJar(type: Jar) {
     archiveFileName = 'NTify-Last.FM.jar'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 build.dependsOn buildJar
